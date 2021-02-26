@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @State private var currentCount = 0
+    @State private var currentCount = UserDefaults.standard.integer(forKey: "currentCount")
     
     @State private var isDecrementOn = false
     
@@ -29,6 +29,8 @@ struct ContentView: View {
                     
                     Button(action: {
                         self.currentCount = 0
+                        UserDefaults.standard.set(0, forKey: "currentCount")
+                        
                     }, label: {
                         Image(systemName: "trash")
                             .font(.headline)
@@ -91,16 +93,24 @@ struct ContentView: View {
                     
                 }
                 
-            }
+            }.padding(.all)
         }
     }
     
     
     func perforMaths(isSubstract: Bool, num: Int) {
+        
+        var result = self.currentCount
+        
         if isSubstract == true {
-            self.currentCount -= num
+            result -= num
         } else {
-            self.currentCount += num
+            result += num
+        }
+        
+        if result >= 0 {
+            currentCount = result
+            UserDefaults.standard.setValue(currentCount, forKey: "currentCount")
         }
     }
     
